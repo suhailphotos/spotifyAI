@@ -18,7 +18,7 @@ The **spotifyAI** project leverages Spotify's Web API and machine learning algor
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/suhailphotos/spotifyAI.git
+   git clone https://github.com/YOUR_USERNAME/spotifyAI.git
    cd spotifyAI
    ```
 
@@ -33,8 +33,21 @@ The **spotifyAI** project leverages Spotify's Web API and machine learning algor
    pip install spotipy scikit-learn
    ```
 
-4. **Set up Spotify API credentials**:
-   - Create a `credentials.json` file in the `config/credentials` folder:
+4. **Set up the environment variable for credentials**:
+   Set the `CREDENTIALS_PATH` environment variable to point to the folder containing your credentials file.
+
+   On Linux/macOS, add this to your `.bashrc` or `.zshrc`:
+   ```bash
+   export CREDENTIALS_PATH=/path/to/your/credentials
+   ```
+
+   On Windows (PowerShell):
+   ```powershell
+   $env:CREDENTIALS_PATH = "C:\path\to\your\credentials"
+   ```
+
+5. **Set up Spotify API credentials**:
+   - Create a `credentials.json` file in the folder pointed to by the `CREDENTIALS_PATH` variable:
      ```json
      {
        "client_id": "YOUR_CLIENT_ID",
@@ -54,24 +67,6 @@ The **spotifyAI** project leverages Spotify's Web API and machine learning algor
    python main.py
    ```
 
-## Project Structure
-
-```
-spotifyAI/
-├── config/
-│   └── credentials/
-│       └── credentials.json  # Spotify API credentials
-├── data/
-│   └── processed/            # Processed data files
-├── src/
-│   └── spotifyAI/
-│       ├── fetch_data.py      # Script to fetch playlists and song data
-│       ├── clustering.py      # Script for song clustering
-│       └── utils.py           # Helper functions
-├── envs/                      # Conda environment configuration (optional)
-└── README.md                  # Project documentation
-```
-
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
@@ -82,5 +77,5 @@ Contributions are welcome! Please fork the repository and create a pull request 
 
 ---
 
-Developed by Suhail.
+Developed by [Your Name].
 
