@@ -26,8 +26,7 @@ def login():
 def redirect_page():
     session.clear()
     code = request.args.get('code')
-    # token_info = create_spotify_oauth().get_access_token(code)
-    token_info = create_spotify_oauth().get_cached_token()
+    token_info = create_spotify_oauth().get_access_token(code)
     session[TOKEN_INFO]=token_info
     return redirect(url_for('get_playlists', _external=True))
 
