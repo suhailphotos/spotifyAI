@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  spotifyai:
+    build:
+      context: .  # Use the current directory for the build context
+    container_name: spotifyai
+    networks:
+      everest:
+        ipv4_address: 10.79.0.3
+        ipv6_address: 2603:8001:a000:111::3
+    ports:
+      - "5000:5000"  # Map Flask's port 5000 in the container to port 5000 on the host
+    environment:
+      FLASK_ENV: development  # Enable Flask debug mode
+    volumes:
+      - ./src:/app/src  # Map the source directory for live updates
+      - ./tests:/app/tests  # Optional: Map the tests directory for debugging
+
+networks:
+  everest:
+    external: true  # Use the existing 'everest' Docker network
