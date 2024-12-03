@@ -5,38 +5,183 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spotify AI</title>
     <style>
+        /* Import Inter and IBM Plex Mono fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+        /* General Styles */
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
+            font-family: "Inter", sans-serif;
+            background-color: #121212; /* Darker background */
+            color: #d4d4d4;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Align elements to the left */
+            justify-content: flex-start;
+            min-height: 100vh;
+            padding: 0; /* Add padding for spacing */
+            box-sizing: border-box; /* Include padding in width/height calculations */
         }
+
+        /* Banner */
+        .banner {
+            width: 100vw;
+            height: 220px;
+            background-image: url('{{ url_for('static', filename='assets/media/banner/spotifyai.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Icon and Heading Section */
+        .icon-heading {
+            display: flex;
+            flex-direction: column; /* Stack icon and heading vertically */
+            align-items: center; /* Center icon and heading */
+            margin-top: -35px; /* Pull up to overlap slightly with banner */
+        }
+
+        .icon-heading img {
+            height: 90px;
+            width: 90px;
+            margin-bottom: 10px; /* Space between icon and heading */
+            margin-left: -130px;
+        }
+
+        /* Divider */
+        .divider {
+            width: calc(100% - 80px); /* Match the output block's width */
+            height: 1px; /* Height of the divider */
+            background-color: #575757; /* Gray color for the divider */
+            margin-left: 40px; /* Align with the output block's left margin */
+            margin-bottom: 15px; /* Add some space below the divider */
+            margin-top: 5px; /* Optional: Add space above if needed */
+            box-sizing: border-box; /* Ensure proper width calculation */
+        }
+
+        .icon-heading h1 {
+            font-size: 56px;
+            font-weight: 700;
+            color: #fff;
+            text-align: center;
+            margin-left: 50px;
+            margin-top: 15px;
+        }
+
+        /* Output Block */
+        .output-block {
+            width: calc(100% - 80px); /* Dynamically resize width with window */
+            height: calc(100% - 400px); /* Dynamic height with room for buttons */
+            background-color: #1a1a1a; /* Darker window background */
+            border-radius: 4px;
+            padding: 20px;
+            margin-top: 0;
+            margin-left: 40px;
+            overflow-y: auto;
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 14px;
+            color: #d4d4d4;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            box-sizing: border-box; /* Ensure padding doesn't overflow */
+        }
+
+        /* Buttons */
+        .button-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center; /* Center buttons */
+            width: 100%;
+            padding-bottom: 40px; /* Ensure space between buttons and bottom of the page */
+        }
+
         button {
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 12px 24px;
+            font-size: 15px;
             cursor: pointer;
-            background-color: #3a3a3a;
+            background-color: #1e8544;
             color: #ffffff;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
         }
+
         button:hover {
-            background-color: #575757;
+            background-color: #2ecd69;
         }
-        #message {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #333;
+
+        button.clear {
+            background-color: #3a3a3a;
+        }
+
+        button.clear:hover {
+            background-color: #575757;
         }
     </style>
 </head>
 <body>
-    <h1>Spotify AI</h1>
-    <form action="/hello" method="POST">
-        <button type="submit">Click Me</button>
-    </form>
-    <div id="message">
-        {% if message %}
-            <p>{{ message }}</p>
-        {% endif %}
+    <!-- Banner -->
+    <div class="banner"></div>
+
+    <!-- Icon and Heading -->
+    <div class="icon-heading">
+        <img src="{{ url_for('static', filename='assets/media/icon/Spotify_icon.svg') }}" alt="Spotify Icon">
+        <h1>Spotify AI</h1>
     </div>
+
+    <!-- Divider -->
+    <div class="divider"></div>
+
+    <!-- Output Block -->
+    <div class="output-block" id="output-block">
+        <p>Output will appear here...</p>
+    </div>
+
+    <!-- Buttons -->
+    <div class="button-container">
+        <button id="run-button">Run</button>
+        <button class="clear" id="clear-button">Clear</button>
+    </div>
+
+    <script>
+        // JavaScript for handling the buttons
+        const outputBlock = document.getElementById("output-block");
+        const runButton = document.getElementById("run-button");
+        const clearButton = document.getElementById("clear-button");
+
+        // Function to dynamically resize the output block
+        function resizeOutputBlock() {
+            const windowHeight = window.innerHeight;
+            const reservedSpace = 400; // Space for banner, icon, heading, and buttons
+            const outputHeight = .8*(windowHeight - reservedSpace);
+
+            // Ensure there's always enough room for buttons
+            const minHeight = 100; // Minimum height for the output block
+            outputBlock.style.height = `${Math.max(outputHeight, minHeight)}px`;
+        }
+
+        // Adjust output block dynamically on window resize
+        window.addEventListener("resize", resizeOutputBlock);
+
+        // Initial call to set the size
+        resizeOutputBlock();
+
+        // Run button functionality
+        runButton.addEventListener("click", () => {
+            const output = document.createElement("p");
+            output.textContent = "# Hello World";
+            outputBlock.appendChild(output);
+            outputBlock.scrollTop = outputBlock.scrollHeight; // Auto-scroll to the bottom
+        });
+
+        // Clear button functionality
+        clearButton.addEventListener("click", () => {
+            outputBlock.innerHTML = "<p>Output will appear here...</p>";
+        });
+    </script>
 </body>
 </html>
