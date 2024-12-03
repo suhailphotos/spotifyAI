@@ -183,6 +183,9 @@
         // Run button functionality
         runButton.addEventListener("click", async () => {
             try {
+                // Clear the placeholder text
+                outputBlock.innerHTML = "";
+    
                 // Fetch response from Flask endpoint
                 const response = await fetch("/hello", {
                     method: "POST",
@@ -196,19 +199,24 @@
                 const data = await response.json(); // Parse JSON response
                 const output = document.createElement("p");
                 output.textContent = data.message; // Append the message from the server
+                output.style.color = "#d4d4d4"; // Default font color
+                output.style.fontStyle = "normal"; // Remove italic style
                 outputBlock.appendChild(output);
                 outputBlock.scrollTop = outputBlock.scrollHeight; // Auto-scroll to the bottom
             } catch (error) {
                 console.error("Error:", error);
                 const errorOutput = document.createElement("p");
                 errorOutput.textContent = "Error fetching data from server.";
+                errorOutput.style.color = "#ff4d4d"; // Use a red color for errors
+                errorOutput.style.fontStyle = "normal"; // Remove italic style
                 outputBlock.appendChild(errorOutput);
             }
         });
     
         // Clear button functionality
         clearButton.addEventListener("click", () => {
-            outputBlock.innerHTML = "<p>Output will appear here...</p>";
+            // Clear the output block and add the placeholder text
+            outputBlock.innerHTML = `<p style="color: #757575; font-style: italic;">Output will appear here...</p>`;
         });
     </script>
 
