@@ -87,6 +87,16 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             box-sizing: border-box; /* Ensure padding doesn't overflow */
         }
+        /* Add this CSS to target the placeholder text */
+        .output-block p {
+            margin: 0; /* Reset margins for precise control */
+            padding: 0px 0; /* Adjust padding to scoot the text up */
+            color: #757575; /* Set the color to gray */
+            text-align: left; /* Adjust alignment as needed (left, center, right) */
+            font-style: italic; /* Optional: Make the text italic for a placeholder effect */
+        }
+
+
 
         /* Buttons */
         .button-container {
@@ -152,36 +162,55 @@
         const outputBlock = document.getElementById("output-block");
         const runButton = document.getElementById("run-button");
         const clearButton = document.getElementById("clear-button");
-
+    
         // Function to dynamically resize the output block
         function resizeOutputBlock() {
             const windowHeight = window.innerHeight;
             const reservedSpace = 400; // Space for banner, icon, heading, and buttons
-            const outputHeight = .8*(windowHeight - reservedSpace);
-
+            const outputHeight = 0.8 * (windowHeight - reservedSpace);
+    
             // Ensure there's always enough room for buttons
             const minHeight = 100; // Minimum height for the output block
             outputBlock.style.height = `${Math.max(outputHeight, minHeight)}px`;
         }
-
+    
         // Adjust output block dynamically on window resize
         window.addEventListener("resize", resizeOutputBlock);
-
+    
         // Initial call to set the size
         resizeOutputBlock();
-
+    
         // Run button functionality
-        runButton.addEventListener("click", () => {
-            const output = document.createElement("p");
-            output.textContent = "# Hello World";
-            outputBlock.appendChild(output);
-            outputBlock.scrollTop = outputBlock.scrollHeight; // Auto-scroll to the bottom
+        runButton.addEventListener("click", async () => {
+            try {
+                // Fetch response from Flask endpoint
+                const response = await fetch("/hello", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" }
+                });
+    
+                if (!response.ok) {
+                    throw new Error("Failed to fetch from server.");
+                }
+    
+                const data = await response.json(); // Parse JSON response
+                const output = document.createElement("p");
+                output.textContent = data.message; // Append the message from the server
+                outputBlock.appendChild(output);
+                outputBlock.scrollTop = outputBlock.scrollHeight; // Auto-scroll to the bottom
+            } catch (error) {
+                console.error("Error:", error);
+                const errorOutput = document.createElement("p");
+                errorOutput.textContent = "Error fetching data from server.";
+                outputBlock.appendChild(errorOutput);
+            }
         });
-
+    
         // Clear button functionality
         clearButton.addEventListener("click", () => {
             outputBlock.innerHTML = "<p>Output will appear here...</p>";
         });
     </script>
+
 </body>
 </html>
